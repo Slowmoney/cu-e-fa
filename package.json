@@ -1,0 +1,17 @@
+{
+    "name": "altv-mango-server",
+    "scripts": {
+        "build": "turbo run build --filter=@altv-resource/*",
+        "dev": "turbo run dev --filter=@altv-resource/*",
+        "server:dev": "npx altv-pkg dev",
+        "server:rc": "npx altv-pkg rc",
+        "server:rel": "npx altv-pkg release",
+        "start": "altv-server",
+        "typecheck": "turbo run typecheck --filter=@altv-resource/*"
+    },
+    "devDependencies": {
+        "altv-pkg": "^2.7.5",
+        "turbo": "^1.13.3",
+        "prettier": "^3.2.5"
+    }
+}
