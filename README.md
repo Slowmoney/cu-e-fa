@@ -10,3 +10,9 @@ J - начать игру
 1 - камень
 2 - ножницы
 3 - бумага
+
+
+# Startup
+pnpm i
+pnpm run build
+./altv-server
