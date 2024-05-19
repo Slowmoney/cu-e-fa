@@ -2,10 +2,10 @@ import { Inject, Injectable } from "@altv-mango/core";
 import * as alt from "@altv/server";
 import assert from "assert";
 import { randomInt } from "crypto";
+import { HandState } from "@shared";
 import { NotifyService } from "../../notify/services/notify.service";
 import { PlayerService } from "../../player/services/player.service";
 import type { MinigameStateEntity } from "../entities/minigame-state.entity";
-import { HandState } from "../enums/hand-state.enum";
 import type { MinigameRepository } from "../interfaces/minigame-repository.interface";
 import { MINIGAME_REPOSITORY } from "../providers/minigame-repository.provider";
 
@@ -137,7 +137,16 @@ export class MinigameService{
     }
 
     public startGameInRadius(player: alt.Player, radius = 10) {
+        const minigame = this.minigameRepository.findByPlayerId(player.id)
+        if (minigame) {
+            this.notifyService.sendNotifyToPlayer(player.id, "Вы уже начали игру")
+            return
+        }
         const players = this.playerService.getPlayerInRadius(player.pos, radius, player.dimension)
+        if (players.length < 2) {
+            this.notifyService.sendNotifyToPlayer(player.id, "Никого нет рядом чтоб начать игру")
+            return
+        }
         this.startGame(players.map(e=>e.id));
     }
 
@@ -156,13 +165,25 @@ export class MinigameService{
     public setHandState(playerId: number, newHandState: HandState) {
         const minigame = this.minigameRepository.findByPlayerId(playerId)
         if (!minigame) {
-            throw new Error("Вы не начали игру")
+            this.notifyService.sendNotifyToPlayer(playerId, "Вы не начали игру")
+            return
         }
         const handState = minigame.getHandState(playerId)
         if (!handState) {
-            throw new Error("Вы не начали игру")
+            this.notifyService.sendNotifyToPlayer(playerId, "Вы не начали игру")
+            return
         }
         handState.setState(newHandState)
+    }
+
+    public setHandStateAndCheckAllStates(playerId: number, newHandState: HandState) {
+        const minigame = this.minigameRepository.findByPlayerId(playerId)
+        if (!minigame) {
+            this.notifyService.sendNotifyToPlayer(playerId, "Вы не начали игру")
+            return
+        }
+        this.setHandState(playerId, newHandState)
+        this.checkHandStates(minigame)
     }
 
     public checkHandStates(minigame: MinigameStateEntity) {

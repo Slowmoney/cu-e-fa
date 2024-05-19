@@ -6,8 +6,8 @@ import type { MinigameRepository } from "../interfaces/minigame-repository.inter
 
 @Injectable()
 export class MinigameRepositoryImpl implements MinigameRepository {
-    static allMinigames = new Set<MinigameStateEntity>()
-    create(playerIds: number[]) {
+    private static allMinigames = new Set<MinigameStateEntity>()
+    public create(playerIds: number[]) {
         const minigame = new MinigameStateEntity()
         for (const playerId of playerIds) {
             minigame.addPlayer(playerId, new HandStateEntity())
@@ -16,11 +16,11 @@ export class MinigameRepositoryImpl implements MinigameRepository {
         return minigame;
     }
 
-    clear(minigame: MinigameStateEntity) {
+    public clear(minigame: MinigameStateEntity) {
         MinigameRepositoryImpl.allMinigames.delete(minigame)
     }
 
-    findByPlayerId(playerId: number) {
+    public findByPlayerId(playerId: number) {
         for (const minigame of MinigameRepositoryImpl.allMinigames) {
             if (minigame.hasPlayer(playerId)) return minigame;
         }

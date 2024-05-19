@@ -1,10 +1,6 @@
+import { HandState } from "@shared";
 import { BattleResultEnum } from "../enums/battle-result.enum";
-import { HandState } from "../enums/hand-state.enum";
 import { HandStateEntity } from "./hand-state.entity";
-
-
-
-
 
 export class MinigameStateEntity {
     private playerHandStates = new Map<number, HandStateEntity>()

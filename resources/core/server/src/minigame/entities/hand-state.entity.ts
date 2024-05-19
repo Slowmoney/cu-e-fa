@@ -1,7 +1,5 @@
+import { HandState } from "@shared";
 import { BattleResultEnum } from "../enums/battle-result.enum";
-import { HandState } from "../enums/hand-state.enum";
-
-
 
 export class HandStateEntity {
     protected state: HandState = HandState.None;

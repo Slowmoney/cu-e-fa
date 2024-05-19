@@ -10,3 +10,4 @@ description = 'A simple, lightweight, and powerful TypeScript framework for buil
 modules = ['js-module-v2']
 resources = ['core']
 debug = true
+spawnAfterConnect = true

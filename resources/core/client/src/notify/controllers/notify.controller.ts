@@ -1,11 +1,11 @@
-import { OnServer } from "@altv-mango/client";
-import type { NotifyService } from "../services/notify.service";
+import { Body, Controller, Inject, OnServer } from "@altv-mango/client";
+import { NotifyService } from "../services/notify.service";
 
-
+@Controller()
 export class NotifyController{
-    constructor(private notifyService: NotifyService) {}
+    constructor(@Inject(NotifyService) private notifyService: NotifyService) {}
     @OnServer("notify")
-    sendNotify(text: string) {
+    sendNotify(@Body() text: string) {
         this.notifyService.showNotification(text)
     }
 }
